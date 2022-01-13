@@ -20,3 +20,7 @@ Install-ADDSForest -CreateDnsDelegation:$false -DatabasePath “C:\Windows\NTDS�
 ## Check if the forest has been created.
 Get-ADDomainController –filter *| format-table
 
+## Install RSAT (GUI for manage AD)
+install-windowsfeature rsat
+
+
