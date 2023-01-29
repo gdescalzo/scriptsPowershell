@@ -16,7 +16,7 @@ $TenantId = "2456b851-46fd-4293-907c-d1d81c679af6"
 $SubscriptionId = "794c4aed-01e7-4a3f-b64d-4d4b02022224"
 $AzContext = Set-AzContext -SubscriptionId $SubscriptionId
 
-$myResourceGroup = "GSV-RG"
+$myResourceGroup = "GSV-RG01"
 
 function AzConection {
 
