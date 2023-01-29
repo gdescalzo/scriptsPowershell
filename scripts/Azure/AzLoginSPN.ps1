@@ -23,7 +23,3 @@ function AzConection {
 }
 
 AzConection
-
-Get-AzSubscription
-
-Get-AzContext
