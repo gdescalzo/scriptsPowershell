@@ -14,10 +14,10 @@ $Secret = "UIc8Q~IsxLBanGJcKdKhYMGa2xG7zByu1vsR5b9B"
 $ApplicationId = "e1ee79fc-976d-4d29-97e6-e935abf7d333"
 
 <## To Modify ##>
-$myResourceGroup = "GSV-RG01"
-$myAKSCluster = "GSV-AKScluster01"
+$myResourceGroup = "Murdock"
+$myAKSCluster = "MurdockCluster02"
 $NodeCount = "1"
-$WorkSpaceID = "GSV-WorkSpace01"
+$WorkSpaceID = "MurdockWorkSpace02"
 
 $SecuredPassword = ConvertTo-SecureString $Secret -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ApplicationId, $SecuredPassword

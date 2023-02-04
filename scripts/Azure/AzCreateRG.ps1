@@ -16,7 +16,7 @@ $TenantId = "2456b851-46fd-4293-907c-d1d81c679af6"
 $SubscriptionId = "794c4aed-01e7-4a3f-b64d-4d4b02022224"
 $AzContext = Set-AzContext -SubscriptionId $SubscriptionId
 
-$myResourceGroup = "GSV-RG01"
+$myResourceGroup = "GSV-RGVPN01"
 
 function AzConection {
 
@@ -29,10 +29,10 @@ function AzCreateRG {
     Get-AzResourceGroup -Name $myResourceGroup -ErrorVariable notPresent -ErrorAction SilentlyContinue
 
     if ($notPresent) {
-        New-AzResourceGroup -Name $myResourceGroup -Location eastus
+        New-AzResourceGroup -Name $myResourceGroup -Location brazilsouth
     }
     else {
-        Write-Output "ResourceGroup exist"
+        Write-Output "ResourceGroup exist, try with other name, peach."
     }        
 }
 
