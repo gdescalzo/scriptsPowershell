@@ -40,7 +40,7 @@ market-scrll-2
 
 
 #>
-
+<#
 $downloadURL         = "https://www.cronista.com/MercadosOnline/dolar.html"
 $downloadRequest     = Invoke-WebRequest -uri $downloadURL
 $parseRequest        = $downloadRequest.ParsedHtml.getElementById('market-scrll-2')
@@ -61,7 +61,7 @@ $out1 = $out | select-string -pattern 'Actualizado' -notmatch
 
 $out2 = '{'+$out1+'}' -replace ('" "','";"') -replace ('""','"') | ConvertFrom-String -Delimiter [';']
 $out2
-<#
+
 $jsonArray = @(
 
     $out2.P1   = @(
@@ -78,3 +78,9 @@ $jsonArray = @(
 $jsonArray
 
 #>
+
+$downloadURL = "https://www.cronista.com/MercadosOnline/dolar.html"
+
+
+$downloadRequest = Invoke-WebRequest -uri $downloadURL -UseBasicParsing -Body
+
