@@ -12,10 +12,10 @@
 Import-Module -Name PSDocs;
 
 #Azure Setings
-$OrganizationName = 'murdok2022'
-$ProjectName = 'GD-Automation'
-$PAT = 'o4t7ovfeudluki2mkbactveci4tavvswqlxi4vqwfpx5zkvbd5sa'
-$WikiName = 'GD-Automation.wiki'
+$OrganizationName = 'SomeOrgName'
+$ProjectName = 'SomeProjectName'
+$PAT = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+$WikiName = 'SomeWikiName.wiki'
 
 # Generate markdown for the inline document
 $options = New-PSDocumentOption -Option @{ 'Markdown.UseEdgePipes' = 'Always'; 'Markdown.ColumnPadding' = 'None' };
@@ -30,7 +30,7 @@ $Content = '# This is a test for content automation
 
 
 # Create WIKI page
-$uri = ('https://dev.azure.com/{0}/{1}/_apis/wiki/wikis/{2}/pages?path={3}&api-version=5.0' -f $OrganizationName, $ProjectName, $WikiName, 'demopage2')
+$uri = ('https://dev.azure.com/{0}/{1}/_apis/wiki/wikis/{2}/pages?path={3}&api-version=5.0' -f $OrganizationName, $ProjectName, $WikiName, 'demopage')
 
 $Header = @{
     'Authorization' = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($PAT)")) 

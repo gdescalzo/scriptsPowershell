@@ -1,8 +1,3 @@
-<#
-OpenAI API Key Token: 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
-#>
-
-
 $env:OAIKEY = "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"
 $RequestBody = @{
     prompt      = "quien es Rene fabaloro"
