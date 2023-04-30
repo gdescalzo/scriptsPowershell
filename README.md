@@ -6,4 +6,5 @@
  3. For Azure DevOps
  4. For HyperV
  5. For SharePoint
- 6. Others
+ 6. Dahua
+ 7. Others
