@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Azure Wiki - Overview section template!
+  displayName: 'Azure Wiki | Overview section template'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      
+      # Install Module
+      Install-Module -Name 'PSDocs.Azure' -Repository PSGallery -force;
+      # Import Module
+      Import-Module -Name PSDocs.Azure
+      
+      #Azure Setings
+      $OrganizationName = 'murdok2022'
+      $ProjectName = 'GD-Automation'
+      $PAT = 'tv5yuvfqpv2jwd7kgyc4l2ge5coamqqere4zd4cii6q3zahn43fa'
+      $WikiName = 'azWiki.wiki'
+      $Content = 'This is a test for the Overview wiki section'
+
+      # Create WIKI page
+      $uri = ('https://dev.azure.com/{0}/{1}/_apis/wiki/wikis/{2}/pages?path={3}&api-version=5.0' -f $OrganizationName, $ProjectName, $WikiName, '1. Overview')
+
+      $Header = @{
+          'Authorization' = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($PAT)")) 
+      }
+
+      $params = @{
+          'Uri'         = $uri
+          'Headers'     = $Header
+          'Method'      = 'Put'
+          'ContentType' = 'application/json; charset=utf-8'
+          'body'        = @{content = $content; } | ConvertTo-Json
+      }
+
+      Invoke-RestMethod @params
+
+    failOnStderr: true
+    pwsh: true

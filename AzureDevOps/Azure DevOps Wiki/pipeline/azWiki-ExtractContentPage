@@ -1,0 +1,9 @@
+# Print a wiki page via Azure CLI
+set -eu
+az extension add --name azure-devops
+az devops configure --defaults organization=https://dev.azure.com/nathanhawk0077/ project='TestPrivateGitAgile'
+wiki=TestPrivateGitAgile.wiki
+wiki_path=$'/DnA Wiki'
+response=$(az devops wiki page show --include-content --wiki $wiki --path "$wiki_path")
+content=$(echo "$response" | jq -r '.page.content')
+echo $content
