@@ -1,4 +1,4 @@
-$env:OAIKEY = "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"
+$env:OAIKEY = ""
 $RequestBody = @{
     prompt      = "quien es Rene fabaloro"
     model       = "text-davinci-003"
