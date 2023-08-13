@@ -1,4 +1,4 @@
-﻿$response = Invoke-RestMethod 'https://www.dolarsi.com/api/api.php?type=valoresprincipales' -Method 'GET' 
+$response = Invoke-RestMethod 'https://www.dolarsi.com/api/api.php?type=valoresprincipales' -Method 'GET' 
 
 foreach ($r in $response) {
     
