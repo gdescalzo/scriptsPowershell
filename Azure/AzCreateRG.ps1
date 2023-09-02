@@ -7,7 +7,7 @@ $TenantId = "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
 $SubscriptionId = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 $AzContext = Set-AzContext -SubscriptionId $SubscriptionId
 
-$myResourceGroup = "GSV-RGVPN01"
+$myResourceGroup = "testRG"
 
 function AzConection {
 

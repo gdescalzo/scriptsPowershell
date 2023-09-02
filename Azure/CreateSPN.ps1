@@ -2,7 +2,7 @@
 Connect-AzAccount #>
 
 <# VARS #>
-$SPNDisplayName = "SPN-Gaston"
+$SPNDisplayName = "testSPN"
 $getSubs = (Get-AzSubscription).Name
 
 
