@@ -87,6 +87,10 @@ while ($count -ne $vmCount) {
     <# Set virtual machine processor count #>
     Set-VMProcessor -VMName $vmName -Count $vmCpuCount 
 
+    <# Enable nested virtualization for CPU #>
+    Set-VMProcessor -VMName $vmName -ExposeVirtualizationExtensions $true
+
+
     <# Start the virtual machine #>
     Start-VM -Name $vmName
 
