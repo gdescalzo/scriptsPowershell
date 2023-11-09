@@ -90,9 +90,11 @@ while ($count -ne $vmCount) {
     <# Enable nested virtualization for CPU #>
     Set-VMProcessor -VMName $vmName -ExposeVirtualizationExtensions $true
 
-
     <# Start the virtual machine #>
     Start-VM -Name $vmName
+
+    <# Add DVD Drive #>
+    Add-VMDvdDrive -VMName $vmName
 
     $count++ ;
     $nextVmNumber++ ;
