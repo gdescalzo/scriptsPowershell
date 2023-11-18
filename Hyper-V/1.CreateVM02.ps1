@@ -56,7 +56,8 @@ function Get-NextVhdNumber {
         [string]$VmName
     )
     try {
-        $existingVHD = (Get-VHD ($VhdPath + "*.vhdx") | Select-Object -ExpandProperty Path) -replace [regex]::Escape($VhdPath), '' -replace [regex]::Escape($VmName), '' -replace [regex]::Escape(".vhdx"), ''   
+        #$existingVHD = (Get-VHD ($VhdPath + "*.vhdx") | Select-Object -ExpandProperty Path) -replace [regex]::Escape($VhdPath), '' -replace [regex]::Escape($VmName), '' -replace [regex]::Escape(".vhdx"), ''   
+        $existingVHD = Get-VHD -Path $VhdPath\$VmName + "*.vhdx" | Select-Object -ExpandProperty Path
         $vhdNumbers = $existingVHD | ForEach-Object { [int]$_ }
         $nextVhdNumber = if ($vhdNumbers) { ($vhdNumbers | Measure-Object -Maximum).Maximum + 1 } else { 1 }
         
