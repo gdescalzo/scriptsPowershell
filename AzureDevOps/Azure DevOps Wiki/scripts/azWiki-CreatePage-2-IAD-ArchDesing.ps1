@@ -8,7 +8,7 @@ $Content = '
 - mostly cover technical architecture and components
 
 e.g
-[EY Fuse - Production Architecture(IAD)](/.attachments/EY_Fuse_Production_IAD%20Ver.1.0-0c715f52-04ec-4bd1-8984-69ddc359482b.pdf)
+[CUSTOMERNAME_Production Architecture(IAD)](/.attachments/CUSTOMERNAME_Production-IAD-%20Ver.1.0-0c715f52-04ec-4bd1-8984-69ddc359482b.pdf)
 
 '
 
