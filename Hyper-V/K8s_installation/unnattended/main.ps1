@@ -22,48 +22,46 @@ if (-not $checkADK) { Install-WindowsADK }                          # Install Wi
 $checkHypervStatus = Check-HyperV-Status                            # Check if Hyper-V is installed
 if (-not $checkHypervStatus) { Install-HyperV }                     # Install Hyper-V
 
+<# Show Host Resources #>
+Show-Host-Resources
+
 <# User input (with defaults from JSON config) #>
 Write-Host "`n⚙️  Enter the VM setup`n"
 
-$vmPrefix = Read-Host "Enter the VM name [$hyperv_vmName]"                          # VM Name
+$vmPrefix = Read-Host "Enter the VM name [$hyperv_vmName]"                              # VM Name
 if (-not $vmPrefix) { $vmPrefix = $hyperv_vmName }
 $vmPrefix += $separator
-[int]$vmCount = Read-Host "Enter the number of VMs to create [1]"                   # Number of VMs
+[int]$vmCount = Read-Host "Enter the number of VMs to create [1]"                       # Number of VMs
 if (-not $vmCount -or $vmCount -lt 1) { $vmCount = 1 }
-[int]$vmMemory = Read-Host "Enter memory per VM in GB [$hyperv_vmMemory]"           # Memory per VM (GB)
+[int]$vmMemory = Read-Host "Enter memory per VM in GB [$hyperv_vmMemory]"               # Memory per VM (GB)
 if (-not $vmMemory -or $vmMemory -lt 1) { $vmMemory = $hyperv_vmMemory }
-[int]$vmCpuCount = Read-Host "Enter number of CPUs per VM [$hyperv_vmCpuCount]"     # CPU count per VM
+[int]$vmCpuCount = Read-Host "Enter number of CPUs per VM [$hyperv_vmCpuCount]"         # CPU count per VM
 if (-not $vmCpuCount -or $vmCpuCount -lt 1) { $vmCpuCount = $hyperv_vmCpuCount }
-[int]$vmDiskSize = Read-Host "Enter disk size per VM in GB [$hyperv_vmDiskSize]"    # Disk size per VM (GB)
+[int]$vmDiskSize = Read-Host "Enter disk size per VM in GB [$hyperv_vmDiskSize]"        # Disk size per VM (GB)
 if (-not $vmDiskSize -or $vmDiskSize -lt 1) { $vmDiskSize = $hyperv_vmDiskSize }
-
-<# --- Switch selection ---
-$HypervSwitchNames = @(Get-VMSwitch | Select-Object -ExpandProperty Name)
-if ($HypervSwitchNames.Count -eq 0) {
-    Write-Host "No virtual switches found. Please create one before running this script."
-    exit
+$availableSwitches = Get-HypervSwitchNames                                              # Get available virtual switches
+Write-Host "`n🌐 Available Hyper-V Virtual Switches:`n"
+for ($i = 0; $i -lt $availableSwitches.Count; $i++) {
+    Write-Host "[$i] $($availableSwitches[$i])"
 }
-do {
-    Write-Host "Select a virtual switch:"
-    for ($i = 0; $i -lt $HypervSwitchNames.Count; $i++) {
-        Write-Host ("  {0}. {1}" -f ($i + 1), $HypervSwitchNames[$i])
-    }
-    $selectedOption = [int](Read-Host "Enter the switch number")
-} while ($selectedOption -lt 1 -or $selectedOption -gt $HypervSwitchNames.Count)
-$vmSwitchName = $HypervSwitchNames[$selectedOption - 1]
+$defaultIndex = $availableSwitches.IndexOf($hyperv_switchName)                          # Default switch index (based on JSON default)
+if ($defaultIndex -lt 0) { $defaultIndex = 0 }
+[int]$switchIndex = Read-Host "Enter the number of the switch to use [$defaultIndex]"   # Ask user to select a switch
+if (-not $switchIndex -or $switchIndex -lt 0 -or $switchIndex -ge $availableSwitches.Count) {
+    $switchIndex = $defaultIndex
+}
+$vmSwitch = $availableSwitches[$switchIndex]
+Write-Host "`n✅ Selected virtual switch: $vmSwitch"
 
-# --- Show free space ---
-
-
-
-
-# --- Download Ubuntu Server 22.04 live-server ISO ---
+<# Download Ubuntu Server 22.04 live-server ISO #>
+Write-Host "`n💿 Preparing Ubuntu ISO...`n"
+$isoPath = Ubuntu-ISO-Download
+Write-Host "✅ ISO ready at: $isoPath"
 
 
-# --- Install ADK Deployment Tools if needed ---
-$oscdimgPath = Install-ADK
 
-# --- Create VMs ---
+
+<# --- Create VMs ---
 for ($i = 1; $i -le $vmCount; $i++) {
     $vmName = "$vmPrefix$i"
     $vmVHDname = "$vmPrefix$i"
@@ -153,5 +151,4 @@ autoinstall:
 <#
 $loop = (Get-VM | Select-Object -ExpandProperty Name)
 foreach ($item in $loop) { stop-vm $item -Force ; Remove-VM $item -Force }
-#>
 #>
