@@ -23,7 +23,7 @@ $checkHypervStatus = Check-HyperV-Status                            # Check if H
 if (-not $checkHypervStatus) { Install-HyperV }                     # Install Hyper-V
 
 <# User input (with defaults from JSON config) #>
-Write-Host "`n⚙️ Enter the VM setup`n"
+Write-Host "`n⚙️  Enter the VM setup`n"
 
 $vmPrefix = Read-Host "Enter the VM name [$hyperv_vmName]"                          # VM Name
 if (-not $vmPrefix) { $vmPrefix = $hyperv_vmName }

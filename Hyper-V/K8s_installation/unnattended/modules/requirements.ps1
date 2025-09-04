@@ -5,6 +5,9 @@ $VarsPath = Join-Path $ProjectRoot 'vars\vars.ps1'                      # Build 
 
 <# Check: Hyper-V installation status #>
 function Check-HyperV-Status {
+    
+    $HypervValidation = (Get-Module -ListAvailable -Name Hyper-V) -ne $null     # Check if the Hyper-V module is present on the host.
+
     if (-not $HypervValidation) {
         Write-Error "❌ Hyper-V module is not available. Please install it before running this script."
         exit 1
@@ -16,42 +19,38 @@ function Check-HyperV-Status {
 
 <# Check: Windows ADK status #>
 function Check-Windows-ADK {
-    [CmdletBinding()]
-    param ()
 
-    # Patherns of Windows ADK main components
+    # Patterns of the main components of the Windows ADK
     $adkPatterns = @(
         "Windows Assessment and Deployment Kit",
         "Windows Deployment Tools",
         "Windows System Image Manager"
     )
 
-    # WMI filtering
-    $adkWMI = $HostInstalledProductsWMI | Where-Object { 
+    # Filtering using host.ps1 functions
+    $adkWMI = Get-HostInstalledProductsWMI | Where-Object { 
         $name = $_
         $adkPatterns | ForEach-Object { $name -like "*$_*" } | Where-Object { $_ } 
     }
 
-    # CIM filtering
-    $adkCIM = $HostInstalledProductsCIM | Where-Object { 
+    $adkCIM = Get-HostInstalledProductsCIM | Where-Object { 
         $name = $_
         $adkPatterns | ForEach-Object { $name -like "*$_*" } | Where-Object { $_ } 
     }
 
-    # Registry 
-    $adkReg = $HostInstalledProductsReg | Where-Object { 
+    $adkReg = Get-HostInstalledProductsReg | Where-Object { 
         $name = $_
         $adkPatterns | ForEach-Object { $name -like "*$_*" } | Where-Object { $_ } 
     }
 
-    # Validation: no detected
+    # Validation: not detected
     if (-not $adkWMI -and -not $adkCIM -and -not $adkReg) {
         Write-Error "❌ Windows ADK (Deployment Tools) is not installed or was not detected by any method."
         exit 1
     }
 
     # Show results
-    Write-Host "✅ Windows ADK detected:"
+    Write-Host "✅ Windows ADK detectado:"
     if ($adkWMI) { Write-Host " - WMI: $(( $adkWMI | Sort-Object -Unique ) -join ', ')" }
     if ($adkCIM) { Write-Host " - CIM: $(( $adkCIM | Sort-Object -Unique ) -join ', ')" }
     if ($adkReg) { Write-Host " - Registro: $(( $adkReg | Sort-Object -Unique ) -join ', ')" }
