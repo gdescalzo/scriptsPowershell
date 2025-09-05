@@ -15,10 +15,23 @@ Write-Host "`n🔎 Running environment checks...`n"
 
 Check-Host-Admin                                                    # Check Administrator privileges
 Check-Windows-Architecture                                          # Check Windows Architecture
-
 $checkADK = Check-Windows-ADK                                       # Check Windows ADK status
-if (-not $checkADK) { Install-WindowsADK }                          # Install Windows ADK
+if (-not $checkADK) {
+    Write-Host "⚠️ Windows ADK not found. Installing..."
+    $installResult = Install-WindowsADK                             # Install Windows ADK
+    if (-not $installResult) {
+        Write-Error "❌ Failed to install Windows ADK. Exiting..."
+        exit 1
+    }
 
+    # Re-check after installation
+    $checkADK = Check-Windows-ADK
+    if (-not $checkADK) {
+        Write-Error "❌ ADK installation completed, but Deployment Tools not detected. Exiting..."
+        exit 1
+    }
+}
+Write-Host "✅ Windows ADK (Deployment Tools) is available."
 $checkHypervStatus = Check-HyperV-Status                            # Check if Hyper-V is installed
 if (-not $checkHypervStatus) { Install-HyperV }                     # Install Hyper-V
 

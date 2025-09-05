@@ -79,36 +79,40 @@ function Show-Host-Resources {
     Write-Host " - Temp Path:    $tempPath"
 }
 
-<# Install Windows ADK #>
+<# Install Windows ADK (Base + Deployment Tools) #>
 function Install-WindowsADK {
 
     $InstallerPath = Join-Path (Get-HostTempPath) "adksetup.exe"
+    $DeploymentToolsPath = Join-Path (Get-HostTempPath) "adkdeploysetup.exe"
 
-    # Check if the installer already exists
-    if (Test-Path $InstallerPath) {
-        Write-Host "⚠️ Windows ADK Installer already exists in $InstallerPath, will not be downloaded again."
+    # Download ADK bootstrap
+    if (-not (Test-Path $InstallerPath)) {
+        Write-Host "📥 Downloading Windows ADK installer..."
+        Invoke-WebRequest -Uri $host_BaseURL -OutFile $InstallerPath
     }
     else {
-        Write-Host "📥 Download Windows ADK installer from $host_BaseURL..."
-        try {
-            Invoke-WebRequest -Uri $host_BaseURL -OutFile $InstallerPath
-            Write-Host "✅ Installer downloaded at $InstallerPath"
-        }
-        catch {
-            Write-Error "❌ Error downloading the Windows ADK installer: $_"
-            return $false
-        }
+        Write-Host "⚠️ ADK installer already exists at $InstallerPath"
     }
 
-    Write-Host "⚙️ Running silent installation of Windows ADK (Deployment Tools)..."
-    try {
-        Start-Process -FilePath $InstallerPath -ArgumentList $host_InstallArg -Wait -NoNewWindow
-        Write-Host "✅ Windows ADK (Deployment Tools) installed successfully."
-        return $true
+    # Install ADK silently
+    Write-Host "⚙️ Installing Windows ADK base..."
+    Start-Process -FilePath $InstallerPath -ArgumentList $host_InstallArg -Wait -NoNewWindow
+
+    # Download ADK Deployment Tools bootstrap
+    if (-not (Test-Path $DeploymentToolsPath)) {
+        Write-Host "📥 Downloading Windows ADK Deployment Tools installer..."
+        Invoke-WebRequest -Uri $host_DeploymentURL -OutFile $DeploymentToolsPath
     }
-    catch {
-        Write-Error "❌ Error installing Windows ADK: $_"
-        return $false
+    else {
+        Write-Host "⚠️ Deployment Tools installer already exists at $DeploymentToolsPath"
     }
+
+    # Install Deployment Tools silently
+    Write-Host "⚙️ Installing Windows ADK Deployment Tools..."
+    Start-Process -FilePath $DeploymentToolsPath -ArgumentList $host_InstallArg -Wait -NoNewWindow
+
+    Write-Host "✅ Windows ADK (Base + Deployment Tools) installed successfully."
+    return $true
 }
+
 

@@ -46,7 +46,7 @@ function Check-Windows-ADK {
     # Validation: not detected
     if (-not $adkWMI -and -not $adkCIM -and -not $adkReg) {
         Write-Error "❌ Windows ADK (Deployment Tools) is not installed or was not detected by any method."
-        exit 1
+        return $false
     }
 
     # Show results

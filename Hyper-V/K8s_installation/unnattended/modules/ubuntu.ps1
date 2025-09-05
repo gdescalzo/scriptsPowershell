@@ -8,9 +8,9 @@ function Ubuntu-ISO-Download {
     [CmdletBinding()]
     param ()
 
-    $tempPath = $HostTempPath
-    $baseUrl = $ubuntu_BaseURL
-    $pattern = $ubuntu_ISOpattern
+    $tempPath   = Get-HostTempPath
+    $baseUrl    = $ubuntu_BaseURL
+    $pattern    = $ubuntu_ISOpattern
 
     try {
         Write-Host "🔎 Fetching Ubuntu release page..."
