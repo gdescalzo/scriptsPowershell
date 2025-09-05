@@ -50,10 +50,10 @@ function Check-Windows-ADK {
     }
 
     # Show results
-    Write-Host "✅ Windows ADK detectado:"
+    Write-Host "✅ Windows ADK detected:"
     if ($adkWMI) { Write-Host " - WMI: $(( $adkWMI | Sort-Object -Unique ) -join ', ')" }
     if ($adkCIM) { Write-Host " - CIM: $(( $adkCIM | Sort-Object -Unique ) -join ', ')" }
-    if ($adkReg) { Write-Host " - Registro: $(( $adkReg | Sort-Object -Unique ) -join ', ')" }
+    if ($adkReg) { Write-Host " - Reg: $(( $adkReg | Sort-Object -Unique ) -join ', ')" }
 
     return $true
 }
@@ -77,13 +77,20 @@ function Check-Windows-Architecture {
     # Detects operating system architecture
     $arch = (Get-CimInstance Win32_OperatingSystem).OSArchitecture
 
-    if ($arch -notlike "*64*") {
-        Write-Warning "⚠ This script was tested on 64-bit Windows. The current host is:"
-        # exit 1
+    if ($arch -like "*64*") {
+        Write-Host "✅ System architecture: 64-bit"
+        return "amd64"
+    }
+    elseif ($arch -like "*32*") {
+        Write-Host "✅ System architecture: 32-bit"
+        return "x86"
+    }
+    elseif ($arch -like "*ARM*") {
+        Write-Host "✅ System architecture: ARM64"
+        return "arm64"
     }
     else {
-        Write-Host "✅ System architecture:"
+        Write-Warning "⚠ Could not determine architecture correctly. Defaulting to amd64."
+        return "amd64"
     }
-
-    return $arch
 }

@@ -71,7 +71,16 @@ Write-Host "`n💿 Preparing Ubuntu ISO...`n"
 $isoPath = Ubuntu-ISO-Download
 Write-Host "✅ ISO ready at: $isoPath"
 
+<# Create Cloud-Init ISO #>
+Write-Host "💿 Creating Cloud-Init ISO..." -ForegroundColor Yellow
+$cloudInitISO = New-CloudInitISO
 
+if (-not (Test-Path $cloudInitISO)) {
+    Write-Error "❌ Creating cloud init.iso failed. Abort execution."
+    exit 1
+}
+
+Write-Host "✅ Cloud-Init ISO created on: $cloudInitISO" -ForegroundColor Green
 
 
 <# --- Create VMs ---

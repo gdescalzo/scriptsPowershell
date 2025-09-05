@@ -79,6 +79,42 @@ function Show-Host-Resources {
     Write-Host " - Temp Path:    $tempPath"
 }
 
+function Get-OscdimgPath {
+    param(
+        [string]$Arch = $(Check-Windows-Architecture)  # Detects by host
+    )
+
+    # Try to locate the command directly in the PATH
+    $cmd = Get-Command oscdimg.exe -ErrorAction SilentlyContinue
+    if ($cmd) {
+        return $cmd.Source
+    }
+
+    Write-Host "⚠️ 'oscdimg.exe' not in PATH, searching disk..."
+
+    # Search on disk
+    $searchResults = Get-ChildItem -Path "C:\" -Recurse -Filter "oscdimg.exe" -ErrorAction SilentlyContinue -Force | ForEach-Object {
+        $_.FullName
+    }
+
+    if ($searchResults.Count -gt 0) {
+        # Filter by actual host architecture
+        $preferred = $searchResults | Where-Object { $_ -match "\\$Arch\\Oscdimg\\oscdimg.exe$" } | Select-Object -First 1
+        if ($preferred) {
+            return $preferred
+        }
+        else {
+            Write-Host "⚠️ No se encontró coincidencia exacta para '$Arch'. Usando primera opción encontrada."
+            return $searchResults[0]
+        }
+    }
+
+    # If not found
+    Write-Host "❌ 'oscdimg.exe' Not found in the system."
+    Write-Host "🔄 You must install the 'Deployment Tools' component of the Windows ADK."
+    return $null
+}
+
 <# Install Windows ADK (Base + Deployment Tools) #>
 function Install-WindowsADK {
 

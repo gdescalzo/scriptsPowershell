@@ -39,7 +39,7 @@ autoinstall:
     - vim
     - rsync
     - ntp
-    - ntpdate -y
+    - ntpdate
   late-commands:
     - curtin in-target --target=/target swapoff -a
     - curtin in-target --target=/target sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
