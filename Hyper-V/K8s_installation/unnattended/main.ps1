@@ -6,16 +6,16 @@ $VarsPath = Join-Path $PSScriptRoot 'vars\vars.ps1'
 . $VarsPath
 
 <# Import Modules #>
-Get-ChildItem -Path $ModulesPath -Filter *.ps1 | ForEach-Object {   # Import all .ps1 files into the modules directory
+Get-ChildItem -Path $ModulesPath -Filter *.ps1 | ForEach-Object {                       # Import all .ps1 files into the modules directory
     . $_.FullName
 }
 
 <# Check Requirements #>
 Write-Host "`n🔎 Running environment checks...`n"
 
-Check-Host-Admin                                                    # Check Administrator privileges
-Check-Windows-Architecture                                          # Check Windows Architecture
-$checkADK = Check-Windows-ADK                                       # Check Windows ADK status
+Check-Host-Admin                                                                        # Check Administrator privileges
+Check-Windows-Architecture                                                              # Check Windows Architecture
+$checkADK = Check-Windows-ADK                                                           # Check Windows ADK status
 if (-not $checkADK) {
     Write-Host "⚠️ Windows ADK not found. Installing..."
     $installResult = Install-WindowsADK                             # Install Windows ADK
@@ -32,8 +32,8 @@ if (-not $checkADK) {
     }
 }
 Write-Host "✅ Windows ADK (Deployment Tools) is available."
-$checkHypervStatus = Check-HyperV-Status                            # Check if Hyper-V is installed
-if (-not $checkHypervStatus) { Install-HyperV }                     # Install Hyper-V
+$checkHypervStatus = Check-HyperV-Status                                                # Check if Hyper-V is installed
+if (-not $checkHypervStatus) { Install-HyperV }                                         # Install Hyper-V
 
 <# Show Host Resources #>
 Show-Host-Resources
@@ -168,9 +168,4 @@ autoinstall:
         Write-Host "Virtual machine already exists: $vmName, skipping creation."
     }
 }
-
-# Optional cleanup
-<#
-$loop = (Get-VM | Select-Object -ExpandProperty Name)
-foreach ($item in $loop) { stop-vm $item -Force ; Remove-VM $item -Force }
 #>
