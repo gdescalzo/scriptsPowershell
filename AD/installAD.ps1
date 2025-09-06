@@ -1,6 +1,6 @@
 
 ## Connect Remote server for administration.
-#$pwd1 = ConvertTo-SecureString "n0T1ad0y" -AsPlainText -Force  
+#$pwd1 = ConvertTo-SecureString "somepassword" -AsPlainText -Force  
 #$cred = New-Object System.Management.Automation.PSCredential (".\Administrator",$pwd1)
 #Enter-PSSession -ComputerName 192.168.122.230 -credential $cred
 
