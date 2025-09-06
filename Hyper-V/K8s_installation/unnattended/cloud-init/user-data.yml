@@ -1,45 +1,51 @@
 #cloud-config
 autoinstall:
   version: 1
-  locale: en_US.UTF-8
+  locale: es_AR.UTF-8
   keyboard:
-    layout: us
-    variant: ''
-  network:
-    version: 2
-    ethernets:
-      ens160:  # depende de cómo Hyper-V nombre la interfaz
-        dhcp4: true
+    layout: latam
+    variant: deadtilde
+  timezone: America/Argentina/Buenos_Aires
+
   identity:
     hostname: k8s-node
     username: ubuntu
-    password: "$6$rounds=4096$SOMEHASH..."  # hash SHA-512 generado con mkpasswd
+    password: "$6$btReBFXrjlfTZbQ4$ZmYNs6XhfTRRVCX0u7wNb2Tndh64YbKFS3APgrqi99FrJsLNlL5BNAkgiIM3cDEydrN1pWKgwShIqu0THavba/" #ubuntu
+
   ssh:
     install-server: true
-    authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ...
+    allow-pw: true
+
   storage:
     layout:
       name: lvm
+
   packages:
-    - containerd
+    - apt-transport-https
+    - ca-certificates
     - curl
-    - vim
+    - gnupg
+    - lsb-release
+    - containerd
+    - iotop
     - htop
-    - net-tools
-    - dnsutils
-    - jq
-    - mc
-    - rsync
-    - fail2ban
-    - ntp
-    - ntpdate
+    - tcpdump
+    - hping3
+    - nmap
     - bmon
     - btop
-    - tcpdump
-    - nmap
+    - mc
+    - dnsutils
+    - net-tools
+    - fail2ban
     - bridge-utils
-    - iotop
+    - jq
+    - vim
+    - rsync
+    - ntp
+    - ntpdate
+    - sshpass
+
   late-commands:
     - curtin in-target --target=/target swapoff -a
     - curtin in-target --target=/target sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
